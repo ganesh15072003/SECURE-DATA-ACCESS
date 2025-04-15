@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #eef2f7;
+            font-family: 'Poppins', sans-serif;
+        }
+        .navbar {
+            background: linear-gradient(45deg, #007bff, #0056b3);
+            padding: 15px;
+        }
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        .card {
+            border-radius: 15px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .card-header {
+            background: linear-gradient(45deg, #007bff, #0056b3);
+            color: white;
+            font-weight: bold;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+        }
+        .form-control {
+            border-radius: 10px;
+        }
+        .btn-custom {
+            background: #007bff;
+            color: white;
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+        .btn-custom:hover {
+            background: #0056b3;
+            transform: scale(1.05);
+        }
+        .file-list .list-group-item {
+            border-radius: 10px;
+            transition: 0.3s;
+        }
+        .file-list .list-group-item:hover {
+            background: #f1f1f1;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="#">Admin Dashboard</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{{ url_for('logout') }}">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    
+    <!-- Flash messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="alert alert-dismissible fade show" role="alert">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <!-- File Access Time Form -->
+    <div class="card shadow-sm p-3">
+        <div class="card-header text-center">
+            <h4>Set Access Time for Files</h4>
+        </div>
+        <div class="card-body">
+            <form action="{{ url_for('admin_dashboard') }}" method="POST">
+                <div class="mb-3">
+                    <label for="filename" class="form-label">File Name</label>
+                    <input type="text" class="form-control" id="filename" name="filename" required>
+                </div>
+                <div class="mb-3">
+                    <label for="access_time" class="form-label">Access Time (seconds)</label>
+                    <input type="number" class="form-control" id="access_time" name="access_time" required>
+                </div>
+                <button type="submit" class="btn btn-custom w-100">Set Access Time</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- File List -->
+    <div class="card shadow-sm file-list mt-4">
+        <div class="card-header text-center">
+            <h4>Files</h4>
+        </div>
+        <div class="card-body">
+            <ul class="list-group">
+                {% for file in files %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        {{ file }}
+                        <span class="badge bg-info text-white">{{ access_times.get(file, 'Not set') }} sec</span>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

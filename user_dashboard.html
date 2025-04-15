@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+            color: #333;
+            font-family: 'Arial', sans-serif;
+            animation: fadeIn 1s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .dashboard-container {
+            margin: 50px auto;
+            max-width: 500px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s;
+        }
+        .dashboard-container:hover {
+            transform: scale(1.05);
+        }
+        h2 {
+            text-align: center;
+            font-weight: bold;
+            color: #d63384;
+        }
+        .btn-primary, .btn-danger {
+            width: 100%;
+            font-size: 18px;
+            border-radius: 25px;
+            transition: all 0.3s;
+        }
+        .btn-primary:hover, .btn-danger:hover {
+            transform: scale(1.05);
+        }
+        select.form-control {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container dashboard-container">
+        <h2>Welcome, {{ session['username'] }}</h2>
+        <p class="text-center">Select a file to view:</p>
+        <form method="POST" action="/user/dashboard">
+            <div class="form-group">
+                <select name="filename" class="form-control">
+                    {% for file in files %}
+                        <option value="{{ file }}">{{ file }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">View File</button>
+        </form>
+        <a href="/logout" class="btn btn-danger mt-3">Logout</a>
+    </div>
+</body>
+</html>
